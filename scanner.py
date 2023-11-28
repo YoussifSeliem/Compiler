@@ -1,4 +1,4 @@
-import re
+import sys
 
 class Token:
     def __init__(self, token_type, value):
@@ -90,26 +90,29 @@ class Scanner:
             self.current_position += 1
         self.current_position += 2  # Skip '*/'
 
+def read_source_code(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
+
+def write_tokens_to_file(tokens, output_file):
+    try:
+        with open(output_file, 'w') as file:
+            for token in tokens:
+                file.write(str(token) + '\n')
+    except Exception as e:
+        print(f"Error writing to the output file: {e}")
+
 # Example usage:
-source_code = """
-int main() {
-    // This is a single-line comment
-    if (x == 42) {
-        /* This is
-           a block
-           comment */
-        for (int i = 0; i < 10; i++) {
-            y = y + i;
-        }
-    } else {
-        y = 3; // Another comment
-    }
-    return 0;
-}
-"""
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python scanner.py input_file.c output_file.txt")
+        sys.exit(1)
 
-scanner = Scanner(source_code)
-tokens = scanner.scan_tokens()
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
 
-for token in tokens:
-    print(token)
+    source_code = read_source_code(input_file)
+    scanner = Scanner(source_code)
+    tokens = scanner.scan_tokens()
+
+    write_tokens_to_file(tokens, output_file)
