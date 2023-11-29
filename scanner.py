@@ -73,12 +73,6 @@ class Scanner:
     # make sure that the number contains only numbers
     def scan_number(self):
         start = self.current_position
-        while self.current_position < len(self.source_code) and self.source_code[self.current_position].isdigit():
-            self.current_position += 1
-        return int(self.source_code[start:self.current_position])
-
-    def scan_number(self):
-        start = self.current_position
         is_float = False
 
         while self.current_position < len(self.source_code) and (self.source_code[self.current_position].isdigit() or (self.source_code[self.current_position] == '.' and not is_float)):
