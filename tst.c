@@ -8,7 +8,7 @@ int main() {
             y = y + i;
         }
     } else {
-        y = 3; // Another comment
+        y = 3.1; // Another comment
     }
     return 0;
 }

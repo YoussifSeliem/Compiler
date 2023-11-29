@@ -1,10 +1,12 @@
 import sys
 
 class Token:
+    # The structure of the token
     def __init__(self, token_type, value):
         self.type = token_type
         self.value = value
 
+    # The format of printing tokens
     def __str__(self):
         return f'Token<{self.type}, {self.value}>'
 
@@ -37,7 +39,7 @@ class Scanner:
                     continue
 
             # Check for numbers
-            if char.isdigit():
+            if char.isdigit() or (char == '.' and self.current_position + 1 < len(self.source_code) and self.source_code[self.current_position + 1].isdigit()):
                 number = self.scan_number()
                 tokens.append(Token("NUMBER", number))
                 continue
@@ -68,12 +70,29 @@ class Scanner:
 
         return tokens
 
+    # make sure that the number contains only numbers
     def scan_number(self):
         start = self.current_position
         while self.current_position < len(self.source_code) and self.source_code[self.current_position].isdigit():
             self.current_position += 1
         return int(self.source_code[start:self.current_position])
 
+    def scan_number(self):
+        start = self.current_position
+        is_float = False
+
+        while self.current_position < len(self.source_code) and (self.source_code[self.current_position].isdigit() or (self.source_code[self.current_position] == '.' and not is_float)):
+            if self.source_code[self.current_position] == '.':
+                is_float = True
+            self.current_position += 1
+
+        if is_float:
+            return float(self.source_code[start:self.current_position])
+        else:
+            return int(self.source_code[start:self.current_position])
+
+
+    # make sure that the identifier contains letters, numbers or _ 
     def scan_identifier(self):
         start = self.current_position
         while self.current_position < len(self.source_code) and (self.source_code[self.current_position].isalnum() or self.source_code[self.current_position] == '_'):
@@ -102,7 +121,7 @@ def write_tokens_to_file(tokens, output_file):
     except Exception as e:
         print(f"Error writing to the output file: {e}")
 
-# Example usage:
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Usage: python scanner.py input_file.c output_file.txt")
