@@ -10,5 +10,6 @@ int main() {
     } else {
         y = 3.1; // Another comment
     }
+    if(x==5&&y>z) printf("good\n");
     return 0;
 }
