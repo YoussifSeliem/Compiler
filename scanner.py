@@ -16,7 +16,7 @@ class Scanner:
         self.current_position = 0
 
         # Define keywords
-        self.keywords = ['if', 'else', 'while', 'for', 'int', 'float', 'break', 'char', 'const', 'continue', 'default', 'double', 'float', 'include', 'main', 'printf', 'return', 'scanf', 'switch', 'void']
+        self.keywords = ['if', 'else', 'while', 'for', 'int', 'float', 'break', 'char', 'const', 'continue', 'default', 'double', 'include', 'main', 'printf', 'return', 'scanf', 'switch', 'void']
 
     def scan_tokens(self):
         tokens = []
@@ -52,7 +52,7 @@ class Scanner:
                 continue
 
             # Check for symbols
-            symbols = ['+', '-', '*', '/', '=', '%', '<', '>', "!", "|", "&", "^", "~"]
+            symbols = ['+', '-', '*', '/', '=', '%', '<', '>', "!", "|", "&"]
             if char in symbols:
                 tokens.append(Token("OPERATOR", char))
                 self.current_position += 1
