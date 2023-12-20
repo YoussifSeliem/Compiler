@@ -10,6 +10,7 @@ int main() {
     } else {
         y = 3.1; // Another comment
     }
-    if(x==5&&y>z) x=4;//printf("good\n");
+    
+    if(x==5&&y>z) x=4;
     return 0;
 }
