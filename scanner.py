@@ -16,7 +16,7 @@ class Scanner:
         self.current_position = 0
 
         # Define keywords
-        self.keywords = ['if', 'else', 'while', 'for', 'int', 'float', 'break', 'char', 'const', 'continue', 'default', 'double', 'include', 'main', 'printf', 'return', 'scanf', 'switch', 'void']
+        self.keywords = ['if', 'else', 'while', 'for', 'int', 'float', 'char', 'double', 'main', 'return']
 
     def scan_tokens(self):
         tokens = []
@@ -51,7 +51,7 @@ class Scanner:
                 tokens.append(Token(token_type, identifier))
                 continue
 
-            # Check for symbols
+            # Check for operators
             symbols = ['+', '-', '*', '/', '=', '%', '<', '>', "!", "|", "&"]
             if char in symbols:
                 tokens.append(Token("OPERATOR", char))
@@ -59,7 +59,7 @@ class Scanner:
                 continue
 
             # Check for special characters
-            special_characters = ['(', ')', '{', '}', ';', '#', '\\', '"', "'",'[', ']']
+            special_characters = ['(', ')', '{', '}', ';', '"', "'",'[', ']']
             if char in special_characters:
                 tokens.append(Token("SPECIAL CHARACTER", char))
                 self.current_position += 1
@@ -80,7 +80,7 @@ class Scanner:
                 is_float = True
             self.current_position += 1
 
-        if is_float:
+        if is_float:    
             return float(self.source_code[start:self.current_position])
         else:
             return int(self.source_code[start:self.current_position])
@@ -116,16 +116,16 @@ def write_tokens_to_file(tokens, output_file):
         print(f"Error writing to the output file: {e}")
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python scanner.py input_file.c output_file.txt")
-        sys.exit(1)
 
-    input_file = sys.argv[1]
-    output_file = sys.argv[2]
+if len(sys.argv) != 3:
+    print("Usage: python scanner.py input_file.c output_file.txt")
+    sys.exit(1)
 
-    source_code = read_source_code(input_file)
-    scanner = Scanner(source_code)
-    tokens = scanner.scan_tokens()
+input_file = sys.argv[1]
+output_file = sys.argv[2]
 
-    write_tokens_to_file(tokens, output_file)
+source_code = read_source_code(input_file)
+scanner = Scanner(source_code)
+tokens = scanner.scan_tokens()
+
+write_tokens_to_file(tokens, output_file)

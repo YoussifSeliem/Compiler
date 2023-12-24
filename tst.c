@@ -10,6 +10,12 @@ int main() {
     } else {
         y = 3.1; // Another comment
     }
+
+    int z;
+    while(x>y) {
+        y++;
+        x--;
+    }
     
     if(x==5&&y>z) x=4;
     return 0;
