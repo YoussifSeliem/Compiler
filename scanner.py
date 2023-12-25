@@ -66,6 +66,7 @@ class Scanner:
                 continue
 
             print(f"Error: Unexpected character '{char}'")
+            sys.exit()
             self.current_position += 1
 
         return tokens
