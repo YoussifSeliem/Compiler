@@ -17,8 +17,8 @@ class Cparser:
         # value = parts[1]
         return parts
 
-    def syntax_error(self, expected, found):
-        print('\033[1;31;40mSyntax Error: expected ' + expected + ' but found '+ found +'\033[0m')
+    def syntax_error(self, expected, found, row, column):
+        print('\033[1;31;40mSyntax Error: expected ' + expected + ' but found '+ found + ' at row ' + row + ' at column ' + str(int(column)-len(found)) +'\033[0m')
         sys.exit()
 
     def parse(self):
@@ -39,15 +39,15 @@ class Cparser:
         elif(token[0] == 'IDENTIFIER' or token[0] == 'NUMBER'):
             self.parse_expression()
             if(not self.match('SPECIAL CHARACTER', ';')):
-                self.syntax_error(';',self.tokens[self.current_token][1])
+                self.syntax_error(';',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
         elif(token[0] == 'SPECIAL CHARACTER' and token[1] == ';'):
             self.match('SPECIAL CHARACTER', ';')
         else:
             print(self.current_token)
             print(len(self.tokens))
             if(self.current_token>=len(self.tokens)-1):
-                self.syntax_error('}',' ')
-            self.syntax_error('KEYWORD or IDENTIFIER or NUMBER',self.tokens[self.current_token][1]) ########## ??????????????????
+                self.syntax_error('}',' ',self.tokens[self.current_token-1][2],self.tokens[self.current_token-1][3]+1)
+            self.syntax_error('KEYWORD or IDENTIFIER or NUMBER',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3]) ########## ??????????????????
             #break
             #self.current_token += 1
 
@@ -60,7 +60,7 @@ class Cparser:
                 return True
             return False
         else:
-            self.syntax_error(expected_value,' nothing')
+            self.syntax_error(expected_value,' nothing',self.tokens[self.current_token][2],self.tokens[self.current_token][3])
 
     
 
@@ -79,7 +79,7 @@ class Cparser:
             self.parse_expression()
 
             if(not self.match('SPECIAL CHARACTER', ')')):
-                self.syntax_error(')',self.tokens[self.current_token][1])
+                self.syntax_error(')',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
 
             self.check_block_or_statement()
             
@@ -89,7 +89,7 @@ class Cparser:
                 # print("Else statement:")
                 self.check_block_or_statement()
         else:
-            self.syntax_error('(',self.tokens[self.current_token][1])
+            self.syntax_error('(',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
 
     def parse_while_statement(self):
 
@@ -98,19 +98,19 @@ class Cparser:
             self.parse_expression()
 
             if(not self.match('SPECIAL CHARACTER', ')')):
-                self.syntax_error(')',self.tokens[self.current_token][1])
+                self.syntax_error(')',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
 
             self.check_block_or_statement()
             
         else:
-            self.syntax_error('(',self.tokens[self.current_token][1])
+            self.syntax_error('(',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
 
     def parse_expression(self): # 4*8+0>1<4>3
         if(not self.check_increment() and not self.check_decrement()):
             if(self.check_operand()):
                 while(self.check_operator()):
                     if(not self.check_operand()):
-                        self.syntax_error('IDENTIFIER or NUMBER',self.tokens[self.current_token][1])
+                        self.syntax_error('IDENTIFIER or NUMBER',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
             
 
     def check_operand(self):
@@ -135,7 +135,7 @@ class Cparser:
     def parse_assignment_statement(self): # int x = 5 ; 
         if self.match('KEYWORD'):  # datatype
             if (not self.match('IDENTIFIER')):
-                self.syntax_error('IDENTIFIER',self.tokens[self.current_token][1])
+                self.syntax_error('IDENTIFIER',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
             if self.match('OPERATOR', '='):
                 self.parse_expression()
             self.match('SPECIAL CHARACTER', ';')  ###########################################################################################
@@ -149,13 +149,13 @@ class Cparser:
             #     self.syntax_error(';',self.tokens[self.current_token][1])
             self.parse_expression()
             if(not self.match('SPECIAL CHARACTER', ';')):
-                self.syntax_error(';',self.tokens[self.current_token][1])
+                self.syntax_error(';',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
             self.parse_expression()
             if(not self.match('SPECIAL CHARACTER', ')')):
-                self.syntax_error(')',self.tokens[self.current_token][1])
+                self.syntax_error(')',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
             self.check_block_or_statement()
         else:
-            self.syntax_error('(',self.tokens[self.current_token][1])
+            self.syntax_error('(',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
 
     def check_block_or_statement(self):
         if (self.tokens[self.current_token][1]=='{'):
@@ -188,9 +188,8 @@ class Cparser:
             print("Return statement:")
             self.parse_expression()
             if(not self.match('SPECIAL CHARACTER', ';')):
-                self.syntax_error(';',self.tokens[self.current_token][1])
+                self.syntax_error(';',self.tokens[self.current_token][1],self.tokens[self.current_token][2],self.tokens[self.current_token][3])
             
-
     def parse_code_block(self):    
         if self.match('SPECIAL CHARACTER', '{'):
             # print("betege ???")

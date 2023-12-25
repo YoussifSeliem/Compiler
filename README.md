@@ -27,17 +27,17 @@
 - ASSIGN => DATATYBE id = VALUE ;
 - OP => +, -, *, /, =, %, <, >, |, &, >=, <=, ==, &&, ||, +=, -=, *=, /=, %=, |=, &=
 - Y => OP id | eps
-- EXPRESSION => id Y ;
+- EXPRESSION => id Y
 - DATATYBE => int | float | double | char
 - VALUE => id | number
-- IF => (EXPR) BLOCK
-- IF => (EXPR) STATMENT
-- IF => (EXPR) BLOCK else BLOCK
-- IF => (EXPR) STATMENT else BLOCK
-- IF => (EXPR) BLOCK else STATMENT
-- IF => (EXPR) STATMENT else STATMENT
-- WHILE => (EXPR) BLOCK
-- WHILE => (EXPR) STATMENT
+- IF => ( EXPR ) BLOCK
+- IF => ( EXPR ) STATMENT
+- IF => ( EXPR ) BLOCK else BLOCK
+- IF => ( EXPR ) STATMENT else BLOCK
+- IF => ( EXPR ) BLOCK else STATMENT
+- IF => ( EXPR ) STATMENT else STATMENT
+- WHILE => ( EXPR ) BLOCK
+- WHILE => ( EXPR ) STATMENT
 - FOR => ( ASSIGN ; EXPR ; EXPR ) BLOCK
 - X => FUNC | ASSIGN | EXPRESSION |WHILE 
 - BLOCK => { X }
